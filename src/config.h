@@ -25,11 +25,4 @@
 #define CMATRIX_ARGS "cmatrix", NULL
 #define CACAFIRE_ARGS "cacafire", NULL
 #define SL_ARGS "sl", NULL
-
-// Needed programs for the application to run
-static const char* needed_progs[] = {
-    "tty-clock",
-    "cmatrix",
-    "cacafire",
-    "sl"
-};
+#define PIPES_ARGS "pipes", NULL

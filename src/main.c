@@ -23,6 +23,8 @@ static void on_kill_signal(int sig) {
 }
 
 int main(void) {
+    system("clear");
+
     srand(time(nullptr));
 
     signal(SIGTERM, on_kill_signal);
@@ -55,6 +57,12 @@ int main(void) {
 
                 case FUN_SL: {
                     char* argv[] = { SL_ARGS };
+                    run_until_exit(argv);
+                    break;
+                }
+
+                case FUN_PIPES: {
+                    char* argv[] = { PIPES_ARGS };
                     run_until_exit(argv);
                     break;
                 }
