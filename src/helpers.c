@@ -51,8 +51,13 @@ pid_t spawn(char* const argv[]) {
     return pid;
 }
 
+void set_title() {
+    write(STDOUT_FILENO, "\033]0;relaxing-tty\007", 18);
+}
+
 void cleanup() {
     system("clear");
+    set_title();
     child_pid = 0;
 }
 
@@ -63,7 +68,7 @@ void run_timed(char* const argv[], const int seconds) {
         return;
 
     sleep(seconds);
-    kill(child_pid, SIGTERM);
+    kill(child_pid, SIGKILL);
 
     waitpid(child_pid, nullptr, 0);
     cleanup();
