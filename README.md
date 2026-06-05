@@ -53,16 +53,5 @@ This makes recently shown modes less likely to appear again, while skipped modes
 | `WEIGHT_MIN`   | `0.1`                           | Minimum weight (keeps modes in pool) |
 
 
-## Debug logging
-
-Run with `-d` to enable debug logging:
-
-```
-./relaxing_tty -d
-```
-
-Each fun mode selection is written to `logs.txt` in the working directory, showing the chosen index and the full weight array before and after adjustment.
-
-
 <br><hr>
 This project is licensed under the `GPL-3.0-only` license (see [LICENSE](LICENSE)).

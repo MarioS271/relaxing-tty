@@ -18,5 +18,3 @@
 #define WEIGHT_RISE (WEIGHT_DROP / (FUN_COUNT - 1.0f))
 #define WEIGHT_MIN 0.1f
 #define WEIGHT_MAX 1.0f
-
-#define LOG_FILE_NAME "logs.txt"
