@@ -17,7 +17,7 @@ volatile pid_t child_pid = 0;
 
 static void on_kill_signal(int sig) {
     if (child_pid > 0)
-        kill(child_pid, SIGKILL);
+        kill(child_pid, SIGTERM);
 
     _exit(0);
 }
@@ -64,7 +64,7 @@ int main(void) {
 
                 case FUN_PIPES: {
                     char* argv[] = { PIPES_ARGS };
-                    run_until_exit(argv);
+                    run_timed(argv, rand_range(FUN_MIN_SECS, FUN_MAX_SECS));
                     break;
                 }
 

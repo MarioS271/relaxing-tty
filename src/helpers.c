@@ -68,7 +68,7 @@ void run_timed(char* const argv[], const int seconds) {
         return;
 
     sleep(seconds);
-    kill(child_pid, SIGKILL);
+    kill(child_pid, SIGTERM);
 
     waitpid(child_pid, nullptr, 0);
     cleanup();
