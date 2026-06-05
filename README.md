@@ -11,9 +11,9 @@ The program loops indefinitely through two modes:
 1. **Clock**: runs `tty-clock` for a random duration between `CLOCK_MIN_SECS` and `CLOCK_MAX_SECS`
 2. **Fun**: picks one of the following at random, runs it, then returns to clock mode:
 - `cmatrix`
-- `cacafire`
 - `sl`
 - `pipes.sh`
+- `cbonsai`
     
 Durations and launch arguments for each program are configured in `config.h`.
 
@@ -23,9 +23,11 @@ Durations and launch arguments for each program are configured in `config.h`.
 The following programs must be in `PATH` at runtime:
 - tty-clock
 - cmatrix
-- cacafire
 - sl
 - pipes
+- cbonsai
+
+These programs are all availiable via `dpkg` and likely other repos like `AUR` too.
 
 
 ## Configuration
