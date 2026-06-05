@@ -16,4 +16,5 @@ typedef enum {
 typedef struct {
     char* const* argv;
     bool timed;
+    bool lolcat_compat;
 } fun_def_t;

@@ -12,6 +12,8 @@
 
 static char clock_color[2] = "7";
 static char* CLOCK_ARGS[] = { "tty-clock", "-c", "-C", clock_color, "-s", nullptr };
+static char* LOLCAT_ARGS[] = { "lolcat", nullptr };
+
 static char* CMATRIX_ARGS[] = { "cmatrix", nullptr };
 static char* SL_ARGS[] = { "sl", nullptr };
 static char* PIPES_ARGS[] = { "pipes", nullptr };
@@ -19,6 +21,7 @@ static char* CBONSAI_ARGS[] = { "cbonsai", "-l", "-i", nullptr };
 
 static const char* NEEDED_PROGS[] = {
     "tty-clock",
+    "lolcat",
     "cmatrix",
     "sl",
     "pipes",

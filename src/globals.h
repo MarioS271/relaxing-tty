@@ -12,4 +12,5 @@
 #include <stdlib.h>
 
 extern volatile pid_t child_pid;
+extern volatile pid_t lolcat_pid;
 extern float weights[FUN_COUNT];

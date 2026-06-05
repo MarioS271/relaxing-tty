@@ -19,28 +19,47 @@
 #include <time.h>
 
 volatile pid_t child_pid = 0;
+volatile pid_t lolcat_pid = 0;
 float weights[FUN_COUNT] = {};
 
 static void on_kill_signal(int sig) {
     if (child_pid > 0)
         kill(child_pid, SIGTERM);
 
+    if (lolcat_pid > 0)
+        kill(lolcat_pid, SIGTERM);
+
     _exit(0);
 }
 
 int main(int argc, char* argv[]) {
-    srand(time(nullptr));
+    int speed_multiplier = 1;
+    bool lolcat_only = false;
+
+    for (int i = 0; i < argc; ++i) {
+        if (strcmp(argv[i], "--help") == 0) {
+            printf("relaxing_tty - A terminal application thats meant to serve as a sort of cozy screensaver,\n");
+            printf("               alternating between a tty-clock and fun programs like sl or pipes-sh.\n");
+            printf("\n");
+            printf("Arguments:\n");
+            printf("  --fast: Cycles through modes at a specified pace (default: 10x)\n");
+            printf("  --lolcat-only: Ignores LOLCAT_MODE_CHANCE and always tries to use it\n");
+            exit(0);
+        }
+
+        if (strcmp(argv[i], "--fast") == 0)
+            speed_multiplier = FAST_MODE_SPEED_MULTIPLIER;
+
+        if (strcmp(argv[i], "--lolcat-only") == 0)
+            lolcat_only = true;
+    }
+
     signal(SIGTERM, on_kill_signal);
     signal(SIGINT, on_kill_signal);
 
+    srand(time(nullptr));
     system("clear");
     set_title();
-
-    int speed_multiplier = 1;
-    for (int i = 0; i < argc; ++i) {
-        if (strcmp(argv[i], "--fast") == 0)
-            speed_multiplier = FAST_MODE_SPEED_MULTIPLIER;
-    }
 
     display_mode_t mode = MODE_CLOCK;
     for (int i = 0; i < FUN_COUNT; ++i) {
@@ -56,6 +75,7 @@ int main(int argc, char* argv[]) {
 
             run_timed(
                 CLOCK_ARGS,
+                false,
                 rand_range(CLOCK_MIN_SECS / speed_multiplier, CLOCK_MAX_SECS / speed_multiplier)
             );
             mode = MODE_FUN;
@@ -93,14 +113,20 @@ int main(int argc, char* argv[]) {
                     weights[i] += WEIGHT_RISE;
             }
 
+            bool lolcat_mode = lolcat_only;
+            if (fun_defs[chosen_mode].lolcat_compat && !lolcat_only)
+                lolcat_mode = rand() % 100 < LOLCAT_MODE_CHANCE * 100;
+
             if (fun_defs[chosen_mode].timed) {
                 run_timed(
                     fun_defs[chosen_mode].argv,
+                    lolcat_mode,
                     rand_range(FUN_MIN_SECS / speed_multiplier, FUN_MAX_SECS / speed_multiplier)
                 );
             } else {
                 run_until_exit(
-                    fun_defs[chosen_mode].argv
+                    fun_defs[chosen_mode].argv,
+                    lolcat_mode
                 );
             }
 
