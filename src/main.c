@@ -13,6 +13,7 @@
 #include "constants.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
@@ -27,7 +28,15 @@ static void on_kill_signal(int sig) {
     _exit(0);
 }
 
-int main(void) {
+int main(int argc, char* argv[]) {
+    FILE* log_file = nullptr;
+
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp(argv[i], "-d") == 0) {
+            log_file = fopen(LOG_FILE_NAME, "w");
+            break;
+        }
+    }
     system("clear");
     set_title();
 
@@ -49,29 +58,6 @@ int main(void) {
             run_timed(CLOCK_ARGS, rand_range(CLOCK_MIN_SECS, CLOCK_MAX_SECS));
             mode = MODE_FUN;
         } else {
-            // float max_weight = 0;
-            //
-            // for (int i = 0; i < FUN_COUNT; ++i) {
-            //     if (weights[i] > max_weight)
-            //         max_weight = weights[i];
-            // }
-            //
-            // fun_mode_t allowed_modes[FUN_COUNT];
-            // int num_allowed_modes = 0;
-            //
-            // for (int i = 0; i < FUN_COUNT; ++i) {
-            //     if (weights[i] >= max_weight)
-            //         allowed_modes[num_allowed_modes++] = (fun_mode_t)i;
-            // }
-            //
-            // if (num_allowed_modes == 0) {
-            //     printf("Error: allowed_modes array contains 0 entries (illegal state), exiting");
-            //     exit(1);
-            // }
-            //
-            // int random_index = rand() % num_allowed_modes;
-            // fun_mode_t chosen_mode = allowed_modes[random_index];
-
             fun_mode_t chosen_mode = -1;
 
             float sum = 0;
@@ -89,6 +75,13 @@ int main(void) {
                 }
             }
 
+            if (log_file) {
+                fprintf(log_file, "chosen: %d | weights before:", chosen_mode);
+                for (int i = 0; i < FUN_COUNT; ++i)
+                    fprintf(log_file, " [%d]=%.3f", i, weights[i]);
+                fprintf(log_file, "\n");
+            }
+
             if (chosen_mode < 0 || chosen_mode >= FUN_COUNT) {
                 printf("Error: chosen_mode is invalid");
                 exit(1);
@@ -103,6 +96,14 @@ int main(void) {
 
                 if (weights[i] + WEIGHT_RISE <= WEIGHT_MAX)
                     weights[i] += WEIGHT_RISE;
+            }
+
+            if (log_file) {
+                fprintf(log_file, "         | weights after: ");
+                for (int i = 0; i < FUN_COUNT; ++i)
+                    fprintf(log_file, " [%d]=%.3f", i, weights[i]);
+                fprintf(log_file, "\n");
+                fflush(log_file);
             }
 
             if (fun_defs[chosen_mode].timed) {
