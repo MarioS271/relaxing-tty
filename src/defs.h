@@ -8,9 +8,15 @@
 
 #pragma once
 
-#include <stdlib.h>
+#include "types.h"
 
-static const char* needed_progs[] = {
+static char* CLOCK_ARGS[] = { "tty-clock", "-c", "-C", "4", "-s", nullptr };
+static char* CMATRIX_ARGS[] = { "cmatrix", nullptr };
+static char* CACAFIRE_ARGS[] = { "cacafire", nullptr };
+static char* SL_ARGS[] = { "sl", nullptr };
+static char* PIPES_ARGS[] = { "pipes", nullptr };
+
+static const char* NEEDED_PROGS[] = {
     "tty-clock",
     "cmatrix",
     "cacafire",
@@ -19,24 +25,17 @@ static const char* needed_progs[] = {
 };
 
 typedef enum {
-    MODE_CLOCK,
-    MODE_FUN
-} display_mode_t;
-
-typedef enum {
     FUN_CMATRIX,
     FUN_CACAFIRE,
     FUN_SL,
     FUN_PIPES,
     FUN_COUNT
-} fun_t;
+} fun_mode_t;
 
-extern volatile pid_t child_pid;
-
-int rand_range(int min, int max);
-void validate_progs();
-pid_t spawn(char* const argv[]);
-void cleanup();
-void set_title();
-void run_timed(char* const argv[], int seconds);
-void run_until_exit(char* const argv[]);
+// i know its shit code but oh well
+static fun_def_t fun_defs[FUN_COUNT] = {
+    [FUN_CMATRIX] = {CMATRIX_ARGS, true},
+    [FUN_CACAFIRE] = { CACAFIRE_ARGS, true },
+    [FUN_SL] = { SL_ARGS, false },
+    [FUN_PIPES] = { PIPES_ARGS, true },
+};

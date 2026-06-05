@@ -7,6 +7,8 @@
  */
 
 #include "defs.h"
+#include "funcs.h"
+#include "globals.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,18 +21,18 @@ int rand_range(const int min, const int max) {
 }
 
 void validate_progs() {
-    int num_of_needed_progs = sizeof(needed_progs) / sizeof(needed_progs[0]);
+    int num_of_needed_progs = sizeof(NEEDED_PROGS) / sizeof(NEEDED_PROGS[0]);
 
     char buffer[32];
     bool error = false;
 
     for (int i = 0; i < num_of_needed_progs; ++i) {
-        snprintf(buffer, sizeof(buffer), "which %s > /dev/null", needed_progs[i]);
+        snprintf(buffer, sizeof(buffer), "which %s > /dev/null", NEEDED_PROGS[i]);
         const int result = system(buffer);
 
         if (WEXITSTATUS(result) != EXIT_SUCCESS) {
             error = true;
-            printf("Missing: %s\n", needed_progs[i]);
+            printf("Missing: %s\n", NEEDED_PROGS[i]);
         }
     }
 

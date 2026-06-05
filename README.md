@@ -30,19 +30,25 @@ The following programs must be in `PATH` at runtime:
 
 ## Configuration
 
-Edit `config.h` before building:
+`defs.h` contains fun mode definitions, while `constants.h` contains constants such as weights and mode times.
+Adjust these to your liking.
 
-| Macro            | Default                                    | Description                              |
-|------------------|--------------------------------------------|------------------------------------------|
-| `CLOCK_MIN_SECS` | `60`                                       | Minimum clock display duration (seconds) |
-| `CLOCK_MAX_SECS` | `300`                                      | Maximum clock display duration (seconds) |
-| `FUN_MIN_SECS`   | `30`                                       | Minimum fun animation duration (seconds) |
-| `FUN_MAX_SECS`   | `90`                                       | Maximum fun animation duration (seconds) |
-| `CLOCK_ARGS`     | `"tty-clock", "-c", "-C", "4", "-s", NULL` | Arguments passed to tty-clock            |
-| `CMATRIX_ARGS`   | `"cmatrix", NULL`                          | Arguments passed to cmatrix              |
-| `CACAFIRE_ARGS`  | `"cacafire", NULL`                         | Arguments passed to cacafire             |
-| `SL_ARGS`        | `"sl", NULL`                               | Arguments passed to sl                   |
-| `PIPES_ARGS`     | `"pipes", NULL`                            | Arguments passes to pipes                |
+
+## Weights
+
+Fun modes use a weight system to avoid repetition. Each mode starts at `1.0` and adjusts after every pick:
+
+- **Chosen**: weight decreases by `WEIGHT_DROP`
+- **Not chosen**: weight increases by `WEIGHT_RISE` (`WEIGHT_DROP / (FUN_COUNT - 1)`)
+- All weights are clamped to `[WEIGHT_MIN, 1.0]`
+
+This makes recently shown modes less likely to appear again, while skipped modes gradually become more likely.
+
+| Macro          | Default                         | Description                          |
+|----------------|---------------------------------|--------------------------------------|
+| `WEIGHT_DROP`  | `0.1`                           | Weight decrease on selection         |
+| `WEIGHT_RISE`  | `WEIGHT_DROP / (FUN_COUNT - 1)` | Weight increase when not selected    |
+| `WEIGHT_MIN`   | `0.1`                           | Minimum weight (keeps modes in pool) |
 
 
 <br><hr>
