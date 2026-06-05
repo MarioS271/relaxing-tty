@@ -13,6 +13,7 @@ The program loops indefinitely through two modes:
 - `cmatrix`
 - `cacafire`
 - `sl`
+- `pipes.sh`
     
 Durations and launch arguments for each program are configured in `config.h`.
 
@@ -24,6 +25,7 @@ The following programs must be in `PATH` at runtime:
 - cmatrix
 - cacafire
 - sl
+- pipes
 
 
 ## Configuration
@@ -40,6 +42,7 @@ Edit `config.h` before building:
 | `CMATRIX_ARGS`   | `"cmatrix", NULL`                          | Arguments passed to cmatrix              |
 | `CACAFIRE_ARGS`  | `"cacafire", NULL`                         | Arguments passed to cacafire             |
 | `SL_ARGS`        | `"sl", NULL`                               | Arguments passed to sl                   |
+| `PIPES_ARGS`     | `"pipes", NULL`                            | Arguments passes to pipes                |
 
 
 <br><hr>
