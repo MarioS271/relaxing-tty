@@ -49,28 +49,50 @@ int main(void) {
             run_timed(CLOCK_ARGS, rand_range(CLOCK_MIN_SECS, CLOCK_MAX_SECS));
             mode = MODE_FUN;
         } else {
-            float max_weight = 0;
+            // float max_weight = 0;
+            //
+            // for (int i = 0; i < FUN_COUNT; ++i) {
+            //     if (weights[i] > max_weight)
+            //         max_weight = weights[i];
+            // }
+            //
+            // fun_mode_t allowed_modes[FUN_COUNT];
+            // int num_allowed_modes = 0;
+            //
+            // for (int i = 0; i < FUN_COUNT; ++i) {
+            //     if (weights[i] >= max_weight)
+            //         allowed_modes[num_allowed_modes++] = (fun_mode_t)i;
+            // }
+            //
+            // if (num_allowed_modes == 0) {
+            //     printf("Error: allowed_modes array contains 0 entries (illegal state), exiting");
+            //     exit(1);
+            // }
+            //
+            // int random_index = rand() % num_allowed_modes;
+            // fun_mode_t chosen_mode = allowed_modes[random_index];
 
+            fun_mode_t chosen_mode = -1;
+
+            float sum = 0;
             for (int i = 0; i < FUN_COUNT; ++i) {
-                if (weights[i] > max_weight)
-                    max_weight = weights[i];
+                sum += weights[i];
             }
 
-            fun_mode_t allowed_modes[FUN_COUNT];
-            int num_allowed_modes = 0;
-
+            float random = (rand() / (float)RAND_MAX) * sum;
             for (int i = 0; i < FUN_COUNT; ++i) {
-                if (weights[i] >= max_weight)
-                    allowed_modes[num_allowed_modes++] = (fun_mode_t)i;
+                random -= weights[i];
+
+                if (random <= 0) {
+                    chosen_mode = (fun_mode_t)i;
+                    break;
+                }
             }
 
-            if (num_allowed_modes == 0) {
-                printf("Error: allowed_modes array contains 0 entries (illegal state), exiting");
+            if (chosen_mode < 0 || chosen_mode >= FUN_COUNT) {
+                printf("Error: chosen_mode is invalid");
                 exit(1);
             }
-
-            int random_index = rand() % num_allowed_modes;
-            fun_mode_t chosen_mode = allowed_modes[random_index];
 
             if (weights[chosen_mode] - WEIGHT_DROP >= WEIGHT_MIN)
                 weights[chosen_mode] -= WEIGHT_DROP;
