@@ -13,6 +13,7 @@
 #include "constants.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
@@ -28,28 +29,35 @@ static void on_kill_signal(int sig) {
 }
 
 int main(int argc, char* argv[]) {
-    system("clear");
-    set_title();
-
     srand(time(nullptr));
-
     signal(SIGTERM, on_kill_signal);
     signal(SIGINT, on_kill_signal);
 
+    system("clear");
+    set_title();
+
+    int speed_multiplier = 1;
+    for (int i = 0; i < argc; ++i) {
+        if (strcmp(argv[i], "--fast") == 0)
+            speed_multiplier = FAST_MODE_SPEED_MULTIPLIER;
+    }
+
+    display_mode_t mode = MODE_CLOCK;
     for (int i = 0; i < FUN_COUNT; ++i) {
         weights[i] = 1.0f;
     }
 
     validate_progs();
 
-    display_mode_t mode = MODE_CLOCK;
-
     while (true) {
         if (mode == MODE_CLOCK) {
             // min color id is 1, max is 7
             clock_color[0] = (char)('0' + rand() % 7 + 1);
 
-            run_timed(CLOCK_ARGS, rand_range(CLOCK_MIN_SECS, CLOCK_MAX_SECS));
+            run_timed(
+                CLOCK_ARGS,
+                rand_range(CLOCK_MIN_SECS / speed_multiplier, CLOCK_MAX_SECS / speed_multiplier)
+            );
             mode = MODE_FUN;
         } else {
             fun_mode_t chosen_mode = -1;
@@ -86,9 +94,14 @@ int main(int argc, char* argv[]) {
             }
 
             if (fun_defs[chosen_mode].timed) {
-                run_timed(fun_defs[chosen_mode].argv, rand_range(FUN_MIN_SECS, FUN_MAX_SECS));
+                run_timed(
+                    fun_defs[chosen_mode].argv,
+                    rand_range(FUN_MIN_SECS / speed_multiplier, FUN_MAX_SECS / speed_multiplier)
+                );
             } else {
-                run_until_exit(fun_defs[chosen_mode].argv);
+                run_until_exit(
+                    fun_defs[chosen_mode].argv
+                );
             }
 
             mode = MODE_CLOCK;
