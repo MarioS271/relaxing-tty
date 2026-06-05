@@ -8,11 +8,11 @@
 
 #pragma once
 
-#define CLOCK_MIN_SECS 10
-#define CLOCK_MAX_SECS 11
+#define CLOCK_MIN_SECS 30
+#define CLOCK_MAX_SECS 120
 
 #define FUN_MIN_SECS 10
-#define FUN_MAX_SECS 11
+#define FUN_MAX_SECS 60
 
 #define WEIGHT_DROP 0.1f
 #define WEIGHT_RISE (WEIGHT_DROP / (FUN_COUNT - 1.0f))
