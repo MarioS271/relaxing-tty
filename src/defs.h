@@ -10,13 +10,6 @@
 
 #include <stdlib.h>
 
-static const char* needed_progs[] = {
-    "tty-clock",
-    "cmatrix",
-    "cacafire",
-    "sl"
-};
-
 typedef enum {
     MODE_CLOCK,
     MODE_FUN

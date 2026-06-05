@@ -7,6 +7,7 @@
  */
 
 #include "defs.h"
+#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,23 +22,22 @@ int rand_range(const int min, const int max) {
 void validate_progs() {
     int num_of_needed_progs = sizeof(needed_progs) / sizeof(needed_progs[0]);
 
-    FILE* fp;
     char buffer[32];
     bool error = false;
 
-    for (int i = 0; i < num_of_needed_progs; i++) {
-        snprintf(buffer, sizeof(buffer), "command -v %s", needed_progs[i]);
-        fp = popen(buffer, "r");
+    for (int i = 0; i < num_of_needed_progs; ++i) {
+        snprintf(buffer, sizeof(buffer), "which %s > /dev/null", needed_progs[i]);
+        const int result = system(buffer);
 
-        if (fp == nullptr) {
+        if (result != EXIT_SUCCESS) {
             error = true;
-            printf("Dependency missing: %s", needed_progs[i]);
+            printf("Missing: %s\n", needed_progs[i]);
         }
     }
 
     if (error) {
-        printf("Aborting because of missing dependencies");
-        _exit(1);
+        printf("Aborting because of missing dependencies\n");
+        exit(1);
     }
 }
 
