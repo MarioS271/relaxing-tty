@@ -29,7 +29,7 @@ void validate_progs() {
         snprintf(buffer, sizeof(buffer), "which %s > /dev/null", needed_progs[i]);
         const int result = system(buffer);
 
-        if (result != EXIT_SUCCESS) {
+        if (WEXITSTATUS(result) != EXIT_SUCCESS) {
             error = true;
             printf("Missing: %s\n", needed_progs[i]);
         }
