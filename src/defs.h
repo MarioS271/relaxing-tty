@@ -12,21 +12,18 @@
 
 static char* CLOCK_ARGS[] = { "tty-clock", "-c", "-C", "4", "-s", nullptr };
 static char* CMATRIX_ARGS[] = { "cmatrix", nullptr };
-static char* CACAFIRE_ARGS[] = { "cacafire", nullptr };
 static char* SL_ARGS[] = { "sl", nullptr };
 static char* PIPES_ARGS[] = { "pipes", nullptr };
 
 static const char* NEEDED_PROGS[] = {
     "tty-clock",
     "cmatrix",
-    "cacafire",
     "sl",
     "pipes"
 };
 
 typedef enum {
     FUN_CMATRIX,
-    FUN_CACAFIRE,
     FUN_SL,
     FUN_PIPES,
     FUN_COUNT
@@ -35,7 +32,6 @@ typedef enum {
 // i know its shit code but oh well
 static fun_def_t fun_defs[FUN_COUNT] = {
     [FUN_CMATRIX] = {CMATRIX_ARGS, true},
-    [FUN_CACAFIRE] = { CACAFIRE_ARGS, true },
     [FUN_SL] = { SL_ARGS, false },
     [FUN_PIPES] = { PIPES_ARGS, true },
 };
