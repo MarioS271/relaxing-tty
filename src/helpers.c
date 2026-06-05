@@ -20,17 +20,22 @@ int rand_range(const int min, const int max) {
     return min + rand() % (max - min + 1);
 }
 
+static bool prog_exists(const char* name) {
+    static const char* search_paths[] = { "/usr/bin", "/usr/local/bin", "/usr/games", NULL };
+    char buf[128];
+    for (int i = 0; search_paths[i]; ++i) {
+        snprintf(buf, sizeof(buf), "%s/%s", search_paths[i], name);
+        if (access(buf, X_OK) == 0) return true;
+    }
+    return false;
+}
+
 void validate_progs() {
     int num_of_needed_progs = sizeof(NEEDED_PROGS) / sizeof(NEEDED_PROGS[0]);
-
-    char buffer[32];
     bool error = false;
 
     for (int i = 0; i < num_of_needed_progs; ++i) {
-        snprintf(buffer, sizeof(buffer), "which %s > /dev/null", NEEDED_PROGS[i]);
-        const int result = system(buffer);
-
-        if (WEXITSTATUS(result) != EXIT_SUCCESS) {
+        if (!prog_exists(NEEDED_PROGS[i])) {
             error = true;
             printf("Missing: %s\n", NEEDED_PROGS[i]);
         }
